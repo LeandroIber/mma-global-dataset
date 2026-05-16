@@ -3,18 +3,15 @@ import json
 import os
 import shutil
 import sys
-
 import pandas as pd
 from kaggle.api.kaggle_api_extended import KaggleApi
 
-KAGGLE_USERNAME = "leandroiber"
+KAGGLE_USERNAME = os.environ.get("KAGGLE_USERNAME", "leandroiber")
 DATASET_SLUG = "pfl-complete-dataset"
 DATASET_TITLE = "PFL Dataset Complete"
-
 CSV_FILE = "clean_sherdog_pfl.csv"
 UPLOAD_DIR = "kaggle_upload"
 METADATA_FILE = "dataset-metadata.json"
-
 DATASET_DESCRIPTION = (
     "Dataset completo da PFL (Professional Fighters League), raspado do "
     "Sherdog.com. Eventos, lutas, resultados, metodos, arbitros e biometria "
@@ -42,7 +39,6 @@ def prepare_upload_dir(base):
     if os.path.exists(upload_path):
         shutil.rmtree(upload_path)
     os.makedirs(upload_path)
-
     shutil.copy(csv_path, os.path.join(upload_path, CSV_FILE))
 
     metadata = {
@@ -68,18 +64,17 @@ def authenticate():
 
 def upload(api, folder, notes):
     dataset_url = f"https://www.kaggle.com/datasets/{KAGGLE_USERNAME}/{DATASET_SLUG}"
-    try:
-        api.dataset_create_new(
-            folder=folder, public=False, quiet=False,
-            convert_to_csv=False, dir_mode="skip",
-        )
-        print(f"Dataset criado com sucesso: {dataset_url}")
-    except Exception:
-        api.dataset_create_version(
-            folder=folder, version_notes=notes, quiet=False,
-            convert_to_csv=False, delete_old_versions=False, dir_mode="skip",
-        )
-        print(f"Nova versao publicada: {dataset_url}")
+    result = api.dataset_create_version(
+        folder=folder, version_notes=notes, quiet=False,
+        convert_to_csv=False, delete_old_versions=False, dir_mode="skip",
+    )
+
+    status = getattr(result, "status", None)
+    error = getattr(result, "error", None) or getattr(result, "errorMessage", None)
+    if (status and str(status).lower() != "ok") or error:
+        raise RuntimeError(f"Falha ao versionar dataset: {error or result}")
+
+    print(f"Nova versao publicada: {dataset_url}")
 
 
 def main():
