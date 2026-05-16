@@ -6,13 +6,13 @@ import sys
 import pandas as pd
 from kaggle.api.kaggle_api_extended import KaggleApi
 
-KAGGLE_USERNAME = "leandroiber"
+KAGGLE_USERNAME = os.environ.get("KAGGLE_USERNAME", "leandroiber")
 DATASET_SLUG = "bellator-mma-complete-dataset"
 DATASET_TITLE = "Bellator MMA Complete Dataset"
-
 CSV_FILE = "clean_sherdog_bellator.csv"
 UPLOAD_DIR = "kaggle_upload"
 METADATA_FILE = "dataset-metadata.json"
+
 
 def version_notes(csv_path):
     try:
@@ -21,6 +21,7 @@ def version_notes(csv_path):
         return f"Atualização {today}: {n} lutas registradas."
     except Exception:
         return "Atualização automática."
+
 
 def prepare_upload_dir(base):
     csv_path = os.path.join(base, CSV_FILE)
@@ -31,7 +32,6 @@ def prepare_upload_dir(base):
     if os.path.exists(upload_path):
         shutil.rmtree(upload_path)
     os.makedirs(upload_path)
-
     shutil.copy(csv_path, os.path.join(upload_path, CSV_FILE))
 
     metadata = {
@@ -50,6 +50,7 @@ def prepare_upload_dir(base):
 
     return upload_path, version_notes(csv_path)
 
+
 def authenticate():
     try:
         api = KaggleApi()
@@ -58,21 +59,21 @@ def authenticate():
     except Exception as exc:
         sys.exit(f"Erro no Kaggle: {exc}")
 
+
 def upload(api, folder, notes):
     dataset_url = f"https://www.kaggle.com/datasets/{KAGGLE_USERNAME}/{DATASET_SLUG}"
-    try:
-        api.dataset_create_new(
-            folder=folder, public=False, quiet=False,
-            convert_to_csv=False, dir_mode="skip",
-        )
-        print(f"Dataset criado com sucesso: {dataset_url}")
-    except Exception as e:
-        print(f"Erro ao criar novo (tentando atualizar versão...): {e}")
-        api.dataset_create_version(
-            folder=folder, version_notes=notes, quiet=False,
-            convert_to_csv=False, delete_old_versions=False, dir_mode="skip",
-        )
-        print(f"Nova versão publicada: {dataset_url}")
+    result = api.dataset_create_version(
+        folder=folder, version_notes=notes, quiet=False,
+        convert_to_csv=False, delete_old_versions=False, dir_mode="skip",
+    )
+
+    status = getattr(result, "status", None)
+    error = getattr(result, "error", None) or getattr(result, "errorMessage", None)
+    if (status and str(status).lower() != "ok") or error:
+        raise RuntimeError(f"Falha ao versionar dataset: {error or result}")
+
+    print(f"Nova versão publicada: {dataset_url}")
+
 
 def main():
     if not KAGGLE_USERNAME:
@@ -89,6 +90,7 @@ def main():
     finally:
         if upload_path and os.path.exists(upload_path):
             shutil.rmtree(upload_path)
+
 
 if __name__ == "__main__":
     main()
