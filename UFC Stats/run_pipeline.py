@@ -1,10 +1,10 @@
 import subprocess
 import sys
-import os
+from pathlib import Path
+
 
 def main():
-    # Caminho fixo informado por você (o 'r' antes das aspas é importante no Windows)
-    pasta_projeto = r"C:\Users\Leandro\Desktop\UFC Stats\2.0"
+    pasta_projeto = Path(__file__).resolve().parent
 
     fases = [
         "fase1_events.py",
@@ -19,17 +19,17 @@ def main():
 
     for fase in fases:
         print(f"\n{'='*50}\n▶ Executando: {fase}\n{'='*50}")
-        
-        caminho_fase = os.path.join(pasta_projeto, fase)
-        
-        # Executa usando o caminho absoluto que você definiu
-        resultado = subprocess.run([sys.executable, caminho_fase])
-        
+
+        caminho_fase = pasta_projeto / fase
+
+        resultado = subprocess.run([sys.executable, str(caminho_fase)])
+
         if resultado.returncode != 0:
             print(f"\n[ERRO FATAL] A pipeline falhou durante a execução de {fase}.")
             sys.exit(resultado.returncode)
 
     print("\n[SUCESSO] Todas as fases da pipeline foram concluídas!")
+
 
 if __name__ == "__main__":
     main()
