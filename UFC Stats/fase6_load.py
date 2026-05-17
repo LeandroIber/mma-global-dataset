@@ -6,6 +6,7 @@ Sobe uma nova versao com notas dinamicas a cada execucao.
 """
 
 import datetime
+import json
 import os
 import shutil
 import sys
@@ -81,6 +82,14 @@ def download_existing_metadata(api: KaggleApi, folder: str) -> None:
     dataset_handle = f"{KAGGLE_USERNAME}/{DATASET_SLUG}"
     print(f"\n[INFO] Baixando metadados existentes de {dataset_handle}...")
     api.dataset_metadata(dataset_handle, path=folder)
+
+    metadata_path = os.path.join(folder, "dataset-metadata.json")
+    with open(metadata_path, "r", encoding="utf-8") as f:
+        metadata = json.load(f)
+    metadata["id"] = dataset_handle
+    with open(metadata_path, "w", encoding="utf-8") as f:
+        json.dump(metadata, f, indent=2, ensure_ascii=False)
+
     print(f"[OK] Metadados existentes preservados para o upload.")
 
 
