@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       organization:
-        description: 'Organização para testar'
+        description: 'Qual deles vc quer destruir?'
         required: true
         type: choice
         options:
