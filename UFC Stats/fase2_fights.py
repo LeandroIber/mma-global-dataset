@@ -1,19 +1,3 @@
-"""
-UFC Stats Scraper - Fase 2
-Le raw_events.csv, visita cada pagina de evento e extrai os links das lutas,
-NOMES E URLs dos lutadores, e categoria de peso. Salva em raw_fights_links.csv.
-
-Mudancas vs versao anterior:
-  - Adicionadas colunas fighter_1_url e fighter_2_url (extraidas dos mesmos
-    anchors que ja tinham o nome). Isso permite, mais a frente:
-      * Fase 4: pular o passo de re-baixar paginas de luta so pra coletar
-        URLs de lutadores (elas ja vem prontas neste CSV).
-      * Fase 5: fazer o join da biometria por URL em vez de por nome
-        (robusto a homonimia).
-  - fetch_html agora faz retry com backoff exponencial.
-  - Correção de protocolo: substitui https por http no loop principal.
-"""
-
 from __future__ import annotations
 
 import time
@@ -27,9 +11,7 @@ from bs4.element import Tag
 INPUT_FILE = "raw_events.csv"
 OUTPUT_FILE = "raw_fights_links.csv"
 
-# Limite de eventos a processar nesta execucao de teste.
-# Para processar TODOS os eventos: defina MAX_EVENTS = None.
-MAX_EVENTS: Optional[int] = None
+MAX_EVENTS: Optional[int] = 20
 
 REQUEST_DELAY_SECONDS = 2
 REQUEST_TIMEOUT = 30
@@ -46,12 +28,6 @@ HEADERS = {
 
 
 def fetch_html(url: str) -> Optional[str]:
-    """Baixa o HTML de uma URL com retry e backoff exponencial.
-
-    Tenta ate MAX_RETRIES vezes, dobrando o tempo de espera a cada falha
-    (2s, 4s, 8s, ...). Retorna o HTML como string, ou None se falhar em
-    todas as tentativas.
-    """
     for attempt in range(1, MAX_RETRIES + 1):
         try:
             response = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
@@ -71,10 +47,6 @@ def fetch_html(url: str) -> Optional[str]:
 
 
 def _extract_fight_url(row: Tag) -> str:
-    """Retorna a URL da pagina de detalhes da luta a partir de uma linha <tr>.
-
-    Tenta primeiro o atributo data-link no <tr>; cai para a tag <a class="b-flag">.
-    """
     data_link = row.get("data-link")
     if data_link:
         return data_link.strip()
@@ -87,15 +59,6 @@ def _extract_fight_url(row: Tag) -> str:
 
 
 def _extract_fighters(row: Tag) -> dict[str, str]:
-    """Retorna nome E URL dos dois lutadores.
-
-    Os anchors <a> dentro da segunda <td> ja carregam tanto o nome (texto)
-    quanto a URL do perfil (href), entao extraimos as duas coisas de uma
-    so vez. Capturar fighter_*_url e o que permite, na Fase 5, fazer o
-    join pela URL do lutador em vez de pelo nome (mais robusto a homonimia).
-
-    Lutador ausente -> string vazia em ambos os campos.
-    """
     result = {
         "fighter_1": "",
         "fighter_1_url": "",
@@ -115,11 +78,6 @@ def _extract_fighters(row: Tag) -> dict[str, str]:
 
 
 def _extract_weight_class(row: Tag) -> str:
-    """Retorna a categoria de peso (coluna 'Weight class').
-
-    No UFC Stats a coluna 'Weight class' costuma ser o 7o <td> (indice 6).
-    Pega o <p> com o texto da categoria.
-    """
     cells = row.find_all("td", recursive=False)
     if len(cells) < 7:
         return ""
@@ -130,7 +88,6 @@ def _extract_weight_class(row: Tag) -> str:
 
 
 def parse_fights(html: str, event_url: str) -> list[dict]:
-    """Faz o parse da pagina de um evento e retorna a lista de lutas extraidas."""
     soup = BeautifulSoup(html, "html.parser")
     table = soup.find("table", class_="b-fight-details__table")
 
@@ -144,7 +101,6 @@ def parse_fights(html: str, event_url: str) -> list[dict]:
 
     fights: list[dict] = []
     for row in tbody.find_all("tr"):
-        # Ignora linhas que nao sao de luta (sem celulas)
         if not row.find_all("td", recursive=False):
             continue
 
@@ -160,7 +116,6 @@ def parse_fights(html: str, event_url: str) -> list[dict]:
 
 
 def load_event_urls(csv_path: str) -> list[str]:
-    """Carrega a coluna event_url do CSV de entrada como lista de strings."""
     df = pd.read_csv(csv_path)
     if "event_url" not in df.columns:
         raise ValueError(f"Coluna 'event_url' nao encontrada em {csv_path}")
@@ -168,7 +123,6 @@ def load_event_urls(csv_path: str) -> list[str]:
 
 
 def save_fights(fights: list[dict], output_path: str) -> None:
-    """Salva os registros de lutas em CSV via Pandas."""
     if not fights:
         print("[AVISO] Nenhuma luta extraida; CSV nao sera gerado.")
         return
@@ -177,11 +131,8 @@ def save_fights(fights: list[dict], output_path: str) -> None:
 
 
 def main() -> None:
-    """Pipeline da Fase 2: le eventos, raspa cada um e consolida as lutas."""
     event_urls = load_event_urls(INPUT_FILE)
 
-    # Para processar todos os eventos, troque a linha abaixo por:
-    # urls_to_process = event_urls
     urls_to_process = event_urls[:MAX_EVENTS] if MAX_EVENTS else event_urls
 
     print(f"[INFO] Processando {len(urls_to_process)} de {len(event_urls)} eventos.")
@@ -198,7 +149,6 @@ def main() -> None:
         all_fights.extend(fights)
         print(f"    -> {len(fights)} lutas extraidas")
 
-        # Rate limit: nao bate de volta no servidor imediatamente
         if idx < len(urls_to_process):
             time.sleep(REQUEST_DELAY_SECONDS)
 
