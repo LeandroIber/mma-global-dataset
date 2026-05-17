@@ -1,10 +1,3 @@
-"""
-UFC Stats Pipeline - Fase 6 (Load)
-
-Faz o upload do clean_ufc_dataset.csv como dataset publico no Kaggle.
-Sobe uma nova versao com notas dinamicas a cada execucao.
-"""
-
 import datetime
 import json
 import os
@@ -20,6 +13,14 @@ DATASET_SLUG = "ufc-stats-complete-dataset"
 CSV_FILE = "clean_ufc_dataset.csv"
 UPLOAD_DIR = "kaggle_upload"
 
+DEFAULT_KEYWORDS = [
+    "sports",
+    "mma",
+    "combat sports",
+    "data analytics",
+    "data visualization",
+]
+
 
 def check_username() -> None:
     if KAGGLE_USERNAME in ("SEU_USUARIO_KAGGLE", "", None):
@@ -34,9 +35,18 @@ def generate_version_notes(csv_path: str) -> str:
         df = pd.read_csv(csv_path)
         rows = len(df)
         today = datetime.datetime.now().strftime("%d/%m/%Y")
-        return f"Atualização automática de {today}: Dataset consolidado com {rows} lutas registradas."
+        return (
+            f"Atualização automática de {today}: "
+            f"Dataset consolidado com {rows} lutas registradas."
+        )
     except Exception:
         return "Atualizacao automatica da pipeline ETL"
+
+
+def extract_error(result):
+    if result is None:
+        return None
+    return getattr(result, "error", None) or getattr(result, "errorMessage", None)
 
 
 def prepare_upload_dir() -> tuple[str, str]:
@@ -78,7 +88,7 @@ def authenticate_kaggle() -> KaggleApi:
         sys.exit(1)
 
 
-def download_existing_metadata(api: KaggleApi, folder: str) -> None:
+def prepare_metadata(api: KaggleApi, folder: str) -> dict:
     dataset_handle = f"{KAGGLE_USERNAME}/{DATASET_SLUG}"
     print(f"\n[INFO] Baixando metadados existentes de {dataset_handle}...")
     api.dataset_metadata(dataset_handle, path=folder)
@@ -86,16 +96,24 @@ def download_existing_metadata(api: KaggleApi, folder: str) -> None:
     metadata_path = os.path.join(folder, "dataset-metadata.json")
     with open(metadata_path, "r", encoding="utf-8") as f:
         metadata = json.load(f)
+
     metadata["id"] = dataset_handle
+
+    existing_keywords = metadata.get("keywords") or []
+    if not existing_keywords:
+        metadata["keywords"] = DEFAULT_KEYWORDS
+        print(f"[INFO] Keywords vazias no Kaggle. Aplicando defaults: {DEFAULT_KEYWORDS}")
+    else:
+        print(f"[INFO] Keywords existentes preservadas: {existing_keywords}")
+
     with open(metadata_path, "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2, ensure_ascii=False)
 
-    print(f"[OK] Metadados existentes preservados para o upload.")
+    print("[OK] Metadata preparada para upload.")
+    return metadata
 
 
-def upload_dataset(api: KaggleApi, folder: str, version_notes: str) -> None:
-    dataset_url = f"https://www.kaggle.com/datasets/{KAGGLE_USERNAME}/{DATASET_SLUG}"
-
+def create_new_version(api: KaggleApi, folder: str, version_notes: str) -> None:
     print("\n[INFO] Publicando nova versao do dataset...")
     result = api.dataset_create_version(
         folder=folder,
@@ -107,32 +125,60 @@ def upload_dataset(api: KaggleApi, folder: str, version_notes: str) -> None:
     )
 
     status = getattr(result, "status", None)
-    error = getattr(result, "error", None) or getattr(result, "errorMessage", None)
-    if (status and str(status).lower() != "ok") or error:
+    error = extract_error(result)
+    if (status and str(status).lower() not in ("ok", "none")) or error:
         raise RuntimeError(f"Falha ao versionar dataset: {error or result}")
 
-    print(f"\n[OK] Nova versao publicada com sucesso!")
-    print(f"     Acesse: {dataset_url}")
+    print("[OK] Nova versao publicada com sucesso.")
+
+
+def update_metadata(api: KaggleApi, folder: str) -> None:
+    dataset_handle = f"{KAGGLE_USERNAME}/{DATASET_SLUG}"
+    print("\n[INFO] Atualizando metadata do dataset (tags, descricao, ...)")
+
+    update_fn = getattr(api, "dataset_metadata_update", None)
+    if update_fn is None:
+        print(
+            "[AVISO] A versao instalada do `kaggle` nao expoe "
+            "`dataset_metadata_update`. Atualize: pip install -U kaggle"
+        )
+        return
+
+    try:
+        result = update_fn(dataset_handle, folder)
+    except Exception as exc:
+        print(f"[AVISO] dataset_metadata_update lancou excecao: {exc}")
+        return
+
+    error = extract_error(result)
+    if error:
+        print(f"[AVISO] Falha ao atualizar metadata: {error}")
+    else:
+        print("[OK] Metadata (tags incluidas) atualizada com sucesso.")
 
 
 def main() -> None:
     print("=== UFC Stats Pipeline - Fase 6 (Load) ===\n")
     check_username()
 
+    dataset_url = f"https://www.kaggle.com/datasets/{KAGGLE_USERNAME}/{DATASET_SLUG}"
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    upload_path = os.path.join(base_dir, UPLOAD_DIR)
+
     try:
         upload_dir, notes = prepare_upload_dir()
         api = authenticate_kaggle()
-        download_existing_metadata(api, upload_dir)
-        upload_dataset(api, upload_dir, notes)
+        prepare_metadata(api, upload_dir)
+        create_new_version(api, upload_dir, notes)
+        update_metadata(api, upload_dir)
+        print(f"\n[OK] Pipeline concluida. Acesse: {dataset_url}")
     except Exception as e:
         print(f"[ERRO] Falha na Fase 6: {e}")
         sys.exit(1)
     finally:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        upload_path = os.path.join(base_dir, UPLOAD_DIR)
         if os.path.exists(upload_path):
             shutil.rmtree(upload_path)
-            print(f"\n[INFO] Pasta temporaria de upload removida.")
+            print("\n[INFO] Pasta temporaria de upload removida.")
 
 
 if __name__ == "__main__":
