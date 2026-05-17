@@ -8,6 +8,7 @@ def main():
 
     fases = [
         "fase1_events.py",
+        "fase1_5_download_previous.py",
         "fase2_fights.py",
         "fase3_stats.py",
         "fase4_fighters.py",
