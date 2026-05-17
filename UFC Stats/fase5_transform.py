@@ -158,6 +158,7 @@ def merge_with_history(df_fresh: pd.DataFrame, previous_path: str) -> pd.DataFra
 
     combined = pd.concat([df_previous_filtered, df_fresh], ignore_index=True)
     combined = reorder_columns(combined)
+    combined["event_date"] = pd.to_datetime(combined["event_date"], errors="coerce").dt.strftime("%Y-%m-%d")
     return combined
 
 
