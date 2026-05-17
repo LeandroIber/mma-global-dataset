@@ -6,7 +6,6 @@ Sobe uma nova versao com notas dinamicas a cada execucao.
 """
 
 import datetime
-import json
 import os
 import shutil
 import sys
@@ -16,11 +15,9 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 
 KAGGLE_USERNAME = os.environ.get("KAGGLE_USERNAME", "leandroiber")
 DATASET_SLUG = "ufc-stats-complete-dataset"
-DATASET_TITLE = "UFC Stats Complete Dataset (Metric System)"
 
 CSV_FILE = "clean_ufc_dataset.csv"
 UPLOAD_DIR = "kaggle_upload"
-METADATA_FILE = "dataset-metadata.json"
 
 
 def check_username() -> None:
@@ -60,18 +57,8 @@ def prepare_upload_dir() -> tuple[str, str]:
     shutil.copy(caminho_csv_real, dest_csv)
     print(f"[OK] CSV movido para area de stage: {dest_csv}")
 
-    metadata = {
-        "title": DATASET_TITLE,
-        "id": f"{KAGGLE_USERNAME}/{DATASET_SLUG}",
-        "licenses": [{"name": "CC0-1.0"}],
-        "description": "Dataset completo do UFC Stats. Contém eventos, resultados, estatísticas e biometria padronizada para o sistema métrico."
-    }
-    metadata_path = os.path.join(upload_path, METADATA_FILE)
-    with open(metadata_path, "w", encoding="utf-8") as f:
-        json.dump(metadata, f, indent=2, ensure_ascii=False)
-
     notes = generate_version_notes(caminho_csv_real)
-    print(f"[OK] Metadados gerados com a nota: '{notes}'")
+    print(f"[OK] Nota de versao gerada: '{notes}'")
 
     return upload_path, notes
 
@@ -88,6 +75,13 @@ def authenticate_kaggle() -> KaggleApi:
         print("ou o arquivo ~/.kaggle/kaggle.json.")
         print(f"Detalhe: {exc}")
         sys.exit(1)
+
+
+def download_existing_metadata(api: KaggleApi, folder: str) -> None:
+    dataset_handle = f"{KAGGLE_USERNAME}/{DATASET_SLUG}"
+    print(f"\n[INFO] Baixando metadados existentes de {dataset_handle}...")
+    api.dataset_metadata(dataset_handle, path=folder)
+    print(f"[OK] Metadados existentes preservados para o upload.")
 
 
 def upload_dataset(api: KaggleApi, folder: str, version_notes: str) -> None:
@@ -119,6 +113,7 @@ def main() -> None:
     try:
         upload_dir, notes = prepare_upload_dir()
         api = authenticate_kaggle()
+        download_existing_metadata(api, upload_dir)
         upload_dataset(api, upload_dir, notes)
     except Exception as e:
         print(f"[ERRO] Falha na Fase 6: {e}")
