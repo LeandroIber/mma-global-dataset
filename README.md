@@ -1,4 +1,4 @@
-# MMA Global Dataset
+# Web scraping MMA Global Dataset
 
 Pipeline ETL automatizado que raspa, padroniza e publica datasets das principais organizações de MMA do mundo. Cada organização tem seu próprio módulo, mas todos seguem a mesma arquitetura de 6 fases e exportam o dataset final para o Kaggle.
 
