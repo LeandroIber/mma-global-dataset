@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       organization:
-        description: 'Qual deles vc quer destruir?'
+        description: 'Selecione o evento que deseja atualizar'
         required: true
         type: choice
         options:
