@@ -21,7 +21,7 @@ Todos os datasets usam sistema métrico (kg, cm), independente da unidade origin
 
 ## Arquitetura
 
-Cada pasta de organização contém um pipeline próprio dividido em 6 fases, cada uma persistindo seu resultado num CSV/JSONL intermediário:
+Cada pasta de organização contém um pipeline próprio dividido em 5 ou 6 fases, cada uma persistindo seu resultado num CSV/JSONL intermediário:
 
 * `fase1_events.py`: lista de eventos concluídos.
 * `fase2_fights.py`: visita cada evento e coleta URLs das lutas e dos lutadores.
@@ -42,7 +42,7 @@ Dependências:
 pip install -r requirements.txt
 ```
 
-Antes de rodar a Fase 6, configure as credenciais do Kaggle. Baixe o `kaggle.json` em https://www.kaggle.com/settings e coloque em:
+Antes de rodar a Fase 5, configure as credenciais do Kaggle. Baixe o `kaggle.json` em https://www.kaggle.com/settings e coloque em:
 
 * Linux/Mac: `~/.kaggle/kaggle.json`
 * Windows: `%USERPROFILE%\.kaggle\kaggle.json`
