@@ -30,7 +30,7 @@ Cada pasta de organização contém um pipeline próprio dividido em 6 fases, ca
 * `fase5_transform.py`: joins relacionais entre os 4 datasets brutos e conversão de unidades imperiais para métricas.
 * `fase6_load.py`: upload do CSV consolidado pro Kaggle (cria na primeira execução, versiona daí em diante).
 
-O módulo `utils.py` de cada pasta concentra o cliente HTTP (com retry exponencial) e a normalização de URL, evitando duplicação entre fases. O `run_pipeline.py` é só um wrapper que roda as fases em sequência.
+O módulo `utils.py` de cada pasta concentra o cliente HTTP (com retry exponencial) e a normalização de URL, evitando duplicação entre fases. O `run_pipeline.py` é um wrapper que roda as fases em sequência.
 
 O schema das colunas pode variar entre organizações porque cada fonte expõe os dados de forma diferente. A padronização para sistema métrico e o pipeline de 6 fases é o que se mantém igual em todas.
 
