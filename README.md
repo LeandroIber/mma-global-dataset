@@ -19,6 +19,12 @@ Pipeline ETL automatizado que raspa, padroniza e publica datasets das principais
 
 Todos os datasets usam sistema métrico (kg, cm), independente da unidade original da fonte.
 
+## Análises
+
+| Organização | Análise                                       | Notebook Kaggle                                                                       |
+| ----------- | --------------------------------------------- | ------------------------------------------------------------------------------------- |
+| UFC         | A Historical Analysis of the UFC Using Data   | https://www.kaggle.com/code/leandroiber/a-historical-analysis-of-the-ufc-using-data   |
+
 ## Arquitetura
 
 Cada pasta de organização contém um pipeline próprio dividido em 5 ou 6 fases, cada uma persistindo seu resultado num CSV/JSONL intermediário:
@@ -37,35 +43,3 @@ O schema das colunas pode variar entre organizações porque cada fonte expõe o
 ## Como rodar
 
 Dependências:
-
-```
-pip install -r requirements.txt
-```
-
-Antes de rodar a Fase 5, configure as credenciais do Kaggle. Baixe o `kaggle.json` em https://www.kaggle.com/settings e coloque em:
-
-* Linux/Mac: `~/.kaggle/kaggle.json`
-* Windows: `%USERPROFILE%\.kaggle\kaggle.json`
-
-E exporte seu usuário:
-
-```
-export KAGGLE_USERNAME=seu_usuario
-```
-
-Pipeline completo de uma organização (entre na pasta correspondente):
-
-```
-cd "UFC Stats"
-python run_pipeline.py
-```
-
-Ou rode fases individualmente, respeitando a ordem. Cada fase consome o output da anterior.
-
-## Atualização
-
-Os datasets são atualizados semanalmente.
-
-## Licença
-
-MIT, veja `LICENSE`.
