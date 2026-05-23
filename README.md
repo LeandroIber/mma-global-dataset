@@ -21,9 +21,11 @@ Todos os datasets usam sistema métrico (kg, cm), independente da unidade origin
 
 ## Análises
 
-| Organização | Análise                                       | Notebook Kaggle                                                                       |
-| ----------- | --------------------------------------------- | ------------------------------------------------------------------------------------- |
-| UFC         | A Historical Analysis of the UFC Using Data   | https://www.kaggle.com/code/leandroiber/a-historical-analysis-of-the-ufc-using-data   |
+| Organização  | Análise                                            | Notebook Kaggle                                                                            |
+| ------------ | -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| UFC          | A Historical Analysis of the UFC Using Data        | https://www.kaggle.com/code/leandroiber/a-historical-analysis-of-the-ufc-using-data        |
+| PFL          | Historical Analysis of the PFL Using Official Data | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-pfl-using-official-data |
+| Jungle Fight | Historical Analysis of the Jungle Fight MMA        | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-jungle-fight-mma        |
 
 ## Arquitetura
 
