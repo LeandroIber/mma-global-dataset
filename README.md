@@ -117,10 +117,7 @@ descritiva e suporta os testes de vantagem física subsequentes.
   <img src="https://github.com/LeandroIber/mma-global-dataset/blob/main/Dataset-global/vitoria%20por%20altura.png?raw=true" alt="Win rate by height advantage" width="720">
 </p>
 
-Teste de proporção da taxa de vitórias do lutador mais alto por categoria,
-com intervalo de confiança de 95% e correção de Benjamini-Hochberg para
-múltiplas comparações. A linha tracejada em 50% representa H₀ (ausência de
-vantagem).
+Teste de proporção da taxa de vitórias do lutador mais alto por categoria.
 
 ## Atualização
 
