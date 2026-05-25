@@ -77,6 +77,53 @@ python run_pipeline.py
 
 Ou rode fases individualmente, respeitando a ordem. Cada fase consome o output da anterior.
 
+## Resultado final > gráficos
+
+Cada organização possui uma análise visual padronizada cobrindo evolução
+temporal, composição de desfechos e atributos físicos por categoria. Os
+gráficos abaixo são exemplos da saída final. O relatório completo de cada
+organização está em `assets/<org>/<org>_historical_analysis.pdf`.
+
+### Duração das lutas ao longo do tempo
+
+<p align="center">
+  <img src="assets/ufc/q1_fight_duration.png" alt="Fight duration over time" width="720">
+</p>
+
+Série temporal da mediana e média de duração das lutas por ano. Separa
+lutas regulares (non-title) de lutas de cinturão (title fights) para
+identificar regimes distintos e efeitos de limites regulatórios.
+
+### Distribuição de desfechos por ano
+
+<p align="center">
+  <img src="assets/ufc/q2_outcome_share.png" alt="Outcome share by year" width="720">
+</p>
+
+Barras empilhadas com a proporção anual de cada tipo de desfecho (KO/TKO,
+finalização, decisão). Permite identificar mudanças na composição de
+resultados ao longo das eras da organização.
+
+### Altura média por categoria de peso
+
+<p align="center">
+  <img src="assets/ufc/q3_height_by_weight_class.png" alt="Mean height by weight class" width="720">
+</p>
+
+Média de altura agregada por categoria, em centímetros. Serve como baseline
+descritiva e suporta os testes de vantagem física subsequentes.
+
+### Taxa de vitórias por vantagem de altura
+
+<p align="center">
+  <img src="assets/ufc/q4_height_advantage_winrate.png" alt="Win rate by height advantage" width="720">
+</p>
+
+Teste de proporção da taxa de vitórias do lutador mais alto por categoria,
+com intervalo de confiança de 95% e correção de Benjamini-Hochberg para
+múltiplas comparações. A linha tracejada em 50% representa H₀ (ausência de
+vantagem).
+
 ## Atualização
 
 Os datasets são atualizados semanalmente.
