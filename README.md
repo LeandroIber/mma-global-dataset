@@ -38,12 +38,12 @@ Todos os datasets usam sistema métrico (kg, cm), independente da unidade origin
 
 Cada pasta de organização contém um pipeline próprio dividido em 5 ou 6 fases, cada uma persistindo seu resultado num CSV/JSONL intermediário:
 
-* `fase1_events.py`: lista de eventos concluídos.
+* `fase1_events.py`: lista de eventos (cards).
 * `fase2_fights.py`: visita cada evento e coleta URLs das lutas e dos lutadores.
 * `fase3_stats.py`: estatísticas Fight Totals (KD, Sig.str, Td, Ctrl) por luta.
-* `fase4_fighters.py`: biometria dos lutadores. Roda em paralelo (5 workers) e mantém checkpoint em JSONL, então pode ser interrompido e retomado.
-* `fase5_transform.py`: joins relacionais entre os 4 datasets brutos e conversão de unidades imperiais para métricas.
-* `fase6_load.py`: upload do CSV consolidado pro Kaggle (cria na primeira execução, versiona daí em diante).
+* `fase4_fighters.py`: biometria dos lutadores.
+* `fase5_transform.py`: joins relacionais entre os 4 datasets brutos e conversão de unidades imperiais para métricas (UFC por exemplo, usa sistema imperial, Organizações brasileiras como Jungle Fight usam sistema métrico).
+* `fase6_load.py`: upload do CSV consolidado pro Kaggle (Exporta o dataset diretamente para o Kaggle).
 
 O módulo `utils.py` de cada pasta concentra o cliente HTTP (com retry exponencial) e a normalização de URL, evitando duplicação entre fases. O `run_pipeline.py` é um wrapper que roda as fases em sequência.
 
