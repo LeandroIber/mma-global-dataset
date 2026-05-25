@@ -1,6 +1,6 @@
-# Web scraping MMA Global Dataset
+# Web scraping MMA Global Dataset, Analysis of datasets and observed results
 
-Pipeline ETL automatizado que raspa, padroniza e publica datasets das principais organizações de MMA do mundo no kaggle. Cada organização tem seu próprio módulo e seu script adaptado.
+Pipeline ETL automatizado que raspa, padroniza e publica datasets das principais organizações de MMA do mundo no kaggle. Cada organização tem seu próprio módulo, seu script adaptado e uma análise detalhada.
 
 ## Organizações cobertas
 
