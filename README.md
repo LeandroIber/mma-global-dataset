@@ -21,11 +21,18 @@ Todos os datasets usam sistema métrico (kg, cm), independente da unidade origin
 
 ## Análises
 
-| Organização  | Análise                                            | Notebook Kaggle                                                                            |
-| ------------ | -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| UFC          | A Historical Analysis of the UFC Using Data        | https://www.kaggle.com/code/leandroiber/a-historical-analysis-of-the-ufc-using-data        |
-| PFL          | Historical Analysis of the PFL Using Official Data | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-pfl-using-official-data |
-| Jungle Fight | Historical Analysis of the Jungle Fight MMA        | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-jungle-fight-mma        |
+| Organização   | Análise                                              | Notebook Kaggle                                                                              |
+| ------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| UFC           | A Historical Analysis of the UFC Using Data          | https://www.kaggle.com/code/leandroiber/a-historical-analysis-of-the-ufc-using-data          |
+| Bellator      | Historical Analysis of the Bellator MMA              | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-bellator-mma              |
+| PFL           | Historical Analysis of the PFL Using Official Data   | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-pfl-using-official-data   |
+| Rizin         | Historical Analysis of the Rizin MMA                 | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-rizin-mma                 |
+| ACA           | Historical Analysis of the ACA Using Official Data   | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-aca-using-official-data   |
+| KSW           | Historical Analysis of the KSW Using Official Data   | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-ksw-using-official-data   |
+| Oktagon       | Historical Analysis of the Oktagon                   | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-oktagon                   |
+| Cage Warriors | Historical Analysis of the CW Using Official Data    | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-cw-using-official-data    |
+| LFA           | Historical Analysis of the LFA Using Official Data   | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-lfa-using-official-data   |
+| Jungle Fight  | Historical Analysis of the Jungle Fight MMA          | https://www.kaggle.com/code/leandroiber/historical-analysis-of-the-jungle-fight-mma          |
 
 ## Arquitetura
 
