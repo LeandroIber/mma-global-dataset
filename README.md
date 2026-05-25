@@ -85,7 +85,7 @@ Dentro da pasta de cada organização tem um PDF com a análise final.
 ### Duração das lutas ao longo do tempo
 
 <p align="center">
-  <img src="assets/ufc/q1_fight_duration.png" alt="Fight duration over time" width="720">
+  <img src="https://github.com/LeandroIber/mma-global-dataset/blob/main/Dataset-global/Duracao%20de%20luta.png?raw=true" alt="Fight duration over time" width="720">
 </p>
 
 Série temporal da mediana e média de duração das lutas por ano. Separa
@@ -95,7 +95,7 @@ identificar regimes distintos e efeitos de limites regulatórios.
 ### Distribuição de desfechos por ano
 
 <p align="center">
-  <img src="assets/ufc/q2_outcome_share.png" alt="Outcome share by year" width="720">
+  <img src="https://github.com/LeandroIber/mma-global-dataset/blob/main/Dataset-global/KOSUBouDEC.png?raw=true" alt="Outcome share by year" width="720">
 </p>
 
 Barras empilhadas com a proporção anual de cada tipo de desfecho (KO/TKO,
@@ -105,7 +105,7 @@ resultados ao longo das eras da organização.
 ### Altura média por categoria de peso
 
 <p align="center">
-  <img src="assets/ufc/q3_height_by_weight_class.png" alt="Mean height by weight class" width="720">
+  <img src="https://github.com/LeandroIber/mma-global-dataset/blob/main/Dataset-global/altura%20por%20categoria.png?raw=true" alt="Mean height by weight class" width="720">
 </p>
 
 Média de altura agregada por categoria, em centímetros. Serve como baseline
@@ -114,7 +114,7 @@ descritiva e suporta os testes de vantagem física subsequentes.
 ### Taxa de vitórias por vantagem de altura
 
 <p align="center">
-  <img src="assets/ufc/q4_height_advantage_winrate.png" alt="Win rate by height advantage" width="720">
+  <img src="https://github.com/LeandroIber/mma-global-dataset/blob/main/Dataset-global/vitoria%20por%20altura.png?raw=true" alt="Win rate by height advantage" width="720">
 </p>
 
 Teste de proporção da taxa de vitórias do lutador mais alto por categoria,
