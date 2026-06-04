@@ -119,9 +119,6 @@ descritiva e suporta os testes de vantagem física subsequentes.
 
 Teste de proporção da taxa de vitórias do lutador mais alto por categoria.
 
-## Atualização
-
-Os datasets são atualizados semanalmente.
 
 ## Licença
 
