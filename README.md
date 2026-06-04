@@ -84,9 +84,8 @@ Dentro da pasta de cada organização tem um PDF com a análise final.
 
 ### Duração das lutas ao longo do tempo
 
-<p align="center">
-  <img src="https://github.com/LeandroIber/mma-global-dataset/blob/main/Dataset-global/Duracao%20de%20luta.png?raw=true" alt="Fight duration over time" width="720">
-</p>
+<img width="676" height="379" alt="image" src="https://github.com/user-attachments/assets/ab6347fb-f552-42e2-bcab-4b843b846033" />
+
 
 Série temporal da mediana e média de duração das lutas por ano. Separa
 lutas regulares (non-title) de lutas de cinturão (title fights) para
@@ -94,9 +93,8 @@ identificar regimes distintos e efeitos de limites regulatórios.
 
 ### Distribuição de desfechos por ano
 
-<p align="center">
-  <img src="https://github.com/LeandroIber/mma-global-dataset/blob/main/Dataset-global/KOSUBouDEC.png?raw=true" alt="Outcome share by year" width="720">
-</p>
+<img width="666" height="351" alt="image" src="https://github.com/user-attachments/assets/8c30072f-72b4-489a-8cff-a62d80ad5a21" />
+
 
 Barras empilhadas com a proporção anual de cada tipo de desfecho (KO/TKO,
 finalização, decisão). Permite identificar mudanças na composição de
@@ -104,18 +102,16 @@ resultados ao longo das eras da organização.
 
 ### Altura média por categoria de peso
 
-<p align="center">
-  <img src="https://github.com/LeandroIber/mma-global-dataset/blob/main/Dataset-global/altura%20por%20categoria.png?raw=true" alt="Mean height by weight class" width="720">
-</p>
+<img width="670" height="461" alt="image" src="https://github.com/user-attachments/assets/e4e76657-0e3a-478d-8431-b0ce2e0440eb" />
+
 
 Média de altura agregada por categoria, em centímetros. Serve como baseline
 descritiva e suporta os testes de vantagem física subsequentes.
 
 ### Taxa de vitórias por vantagem de altura
 
-<p align="center">
-  <img src="https://github.com/LeandroIber/mma-global-dataset/blob/main/Dataset-global/vitoria%20por%20altura.png?raw=true" alt="Win rate by height advantage" width="720">
-</p>
+<img width="669" height="469" alt="image" src="https://github.com/user-attachments/assets/1c23b749-d5c3-42a8-9e3b-5414977c41f6" />
+
 
 Teste de proporção da taxa de vitórias do lutador mais alto por categoria.
 
